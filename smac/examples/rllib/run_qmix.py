@@ -20,8 +20,9 @@ from smac.examples.rllib.env import RLlibStarCraft2Env
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--num-iters", type=int, default=100)
-    parser.add_argument("--num-workers", type=int, default=2)
+    parser.add_argument("--num-iters", type=int, default=1000)
+    parser.add_argument("--num-workers", type=int, default=50)
+    parser.add_argument("--num-gpus", type=int, default=2)
     parser.add_argument("--map-name", type=str, default="8m")
     args = parser.parse_args()
 
@@ -36,7 +37,7 @@ if __name__ == "__main__":
         return env.with_agent_groups(
             grouping, obs_space=obs_space, act_space=act_space)
 
-    ray.init()
+    ray.init(address='172.18.40.22:34677')
     register_env("sc2_grouped", env_creator)
 
     run_experiments({
@@ -48,6 +49,9 @@ if __name__ == "__main__":
             },
             "config": {
                 "num_workers": args.num_workers,
+                "evaluation_interval": 1000,
+                "evaluation_num_episodes": 100,
+                "num_gpus": args.num_gpus,
                 "env_config": {
                     "map_name": args.map_name,
                 },
