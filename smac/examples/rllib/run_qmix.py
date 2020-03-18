@@ -37,7 +37,7 @@ if __name__ == "__main__":
         return env.with_agent_groups(
             grouping, obs_space=obs_space, act_space=act_space)
 
-    ray.init(address='172.18.40.22:34677')
+    ray.init(address=)
     register_env("sc2_grouped", env_creator)
 
     run_experiments({
